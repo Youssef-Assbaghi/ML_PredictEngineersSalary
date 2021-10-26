@@ -1,17 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Oct 25 11:46:36 2021
-
-@author: Youssef
-"""
-from sklearn.datasets import make_regression
 from sklearn.model_selection import train_test_split
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 import pandas as pd
-from Regressor import Regressor
 pd.options.mode.chained_assignment = None
+
+from Regressor import Regressor
 
 from sklearn import preprocessing
 
@@ -96,7 +90,7 @@ def mean_squeared_error(y1, y2):
         mse += (y1[i] - y2[i])**2
     return mse / len(y1)
 
-def regression(x, y): # Creem un objecte de regressió de sklearn regr = LinearRegression()
+def regression(x, y): # Creem un objecte de regressiÃ³ de sklearn regr = LinearRegression()
     regr = LinearRegression()
     # Entrenem el model per a predir y a partir de x
     regr.fit(x, y)
@@ -152,13 +146,24 @@ if __name__ == '__main__':
     entrenar.drop('Salary',inplace=True,axis=1)
     regr = regression(entrenar.to_numpy(),y)
     
+    
+    print("EMPIEZA EL REGRESSOR")
+    w=[0.3,0.6,0.02,0.03,0.39,0.36,0.31,0.32,0.33]
+    s=Regressor(w, 0.001,entrenar.to_numpy(),y)
+    s.trains(1000,0.1)
+    print("FINALIZA EL REGRESSOR")
+    
+    
     y = validar['Salary'].to_numpy()
     X=y.mean()
     validar.drop('Salary',inplace=True,axis=1)
+    predicciones = s.predict(validar.to_numpy())
+    errorVal = s.calcularError(predicciones,y)
+    print("El error que nos da con el conjunto de validacion es de: ", errorVal)
     predicted = regr.predict(validar.to_numpy())
     dif = y - predicted
     # Mostrem l'error (MSE i R2)
-    s=Regressor(entrenar.DOB, entrenar['10percentage'], entrenar.collegeGPA , entrenar.English , entrenar.Logical , entrenar.Quant , entrenar.Domain , entrenar.ComputerProgramming , 0.01)
+
     MSE = mse(y, predicted)
     r2 = r2_score(y, predicted)
     
@@ -171,6 +176,9 @@ if __name__ == '__main__':
     y = test['Salary'].to_numpy()
     X=y.mean()
     test.drop('Salary',inplace=True,axis=1)
+    predicciones = s.predict(test.to_numpy())
+    errorVal = s.calcularError(predicciones,y)
+    print("El error que nos da el error de test es: ", errorVal)
     predicted = regr.predict(test.to_numpy())
     dif = y - predicted
     # Mostrem l'error (MSE i R2)
@@ -227,6 +235,4 @@ El porcentaje de error general es  2418.318207535643
 R2 score:  -562.2355305378046
 Dimensionalitat de la BBDD: (2998, 19)
 Dimensionalitat de les entrades X (2998, 2)
-Dimensionalitat de l'atribut Y (300,)
-"""
-
+Dimensionalitat de l'atribut Y (300,)"""

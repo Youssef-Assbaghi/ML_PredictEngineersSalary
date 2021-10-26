@@ -1,33 +1,46 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Oct 26 16:21:27 2021
-
-@author: Youssef
-"""
-
+import copy as cp
+import numpy as np
+from matplotlib import pyplot as plt
 class Regressor(object):
-    def __init__(self, w0, w1,w2,w3,w4,w5,w6,w7, alpha):
+    def __init__(self, w, alpha, train, y):
         # Inicialitzem w0 i w1 (per ser ampliat amb altres w's)
-        self.w0 = w0
-        self.w1 = w1
-        self.w2 = w2
-        self.w3 = w3
-        self.w4 = w4
-        self.w5 = w5
-        self.w6 = w6
-        self.w7 = w7
-
+        self.w = cp.deepcopy(w) # [w0, ...w8]
         self.alpha = alpha
-
-        
+        self.train = cp.deepcopy(train)
+        self.errores = []
+        self.y = y
     def predict(self, x):
         # implementar aqui la funció de prediccio
+        columna = 0
+        datos = cp.deepcopy(x)
+        for indice in range(1,len(self.w)):
+           datos[:,columna] *= self.w[indice]
+           columna += 1
+        datos += self.w[0]
+        predicciones = np.sum(datos, axis = 1)
+        return predicciones
         pass
-    
+    def calcularError(self,y_validarPred, y):
+        restas = np.add(y_validarPred,-y)
+        cuadrados = np.power(restas,2)
+        costeTotal = (1/(len(y))) * np.sum(cuadrados)
+        return costeTotal
     def __update(self, hy, y):
         # actualitzar aqui els pesos donada la prediccio (hy) i la y real.
+        restas = np.add(hy,-y)
+        cuadrados = np.power(restas,2)
+        costeTotal = (1/(len(y))) * np.sum(cuadrados) #Creo que len(y) = m
+        self.errores.append(costeTotal)
+        for i in range(len(self.w)):
+            self.w[i] = self.w[i] - self.alpha * (costeTotal + (self.epsilon/len(y))*self.w[i])
         pass
     
-    def train(self, max_iter, epsilon):
+    def trains(self, max_iter, epsilon):
         # Entrenar durant max_iter iteracions o fins que la millora sigui inferior a epsilon
+        self.epsilon = epsilon
+        for i in range(max_iter):
+            prediccio = self.predict(self.train)
+            self.__update(prediccio, self.y)
+        plt.figure()
+        plt.scatter(range(max_iter),self.errores)
         pass
