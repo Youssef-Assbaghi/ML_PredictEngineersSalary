@@ -10,6 +10,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 import pandas as pd
+from Regressor import Regressor
 pd.options.mode.chained_assignment = None
 
 from sklearn import preprocessing
@@ -179,6 +180,7 @@ if __name__ == '__main__':
     VAR= 100*MSE/X
     print("El porcentaje de error general es ",VAR)
     print("R2 score: ", r2)
+    s=Regressor(1,2,3)
     
     
     
