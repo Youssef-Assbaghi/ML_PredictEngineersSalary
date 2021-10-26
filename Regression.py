@@ -158,6 +158,7 @@ if __name__ == '__main__':
     predicted = regr.predict(validar.to_numpy())
     dif = y - predicted
     # Mostrem l'error (MSE i R2)
+    s=Regressor(entrenar.DOB, entrenar['10percentage'], entrenar.collegeGPA , entrenar.English , entrenar.Logical , entrenar.Quant , entrenar.Domain , entrenar.ComputerProgramming , 0.01)
     MSE = mse(y, predicted)
     r2 = r2_score(y, predicted)
     
@@ -180,7 +181,9 @@ if __name__ == '__main__':
     VAR= 100*MSE/X
     print("El porcentaje de error general es ",VAR)
     print("R2 score: ", r2)
-    s=Regressor(1,2,3)
+    
+    #s=Regressor(df.DOB, df['10percentage'], df.collegeGPA , df.English , df.Logical , df.Quant , df.Domain , df.ComputerProgramming , df.salary , 0.01)
+    #s=Regressor(df.DOB , df.10percentage , df.collegeGPA , df.English , df.Logical , df.Quant , df.Domain , df.ComputerProgramming , df.salary , 0.01)
     
     
     
